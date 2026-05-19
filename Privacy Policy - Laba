@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Privacy Policy — Wiles App</title>
+  <title>Privacy Policy — Laba</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -233,15 +233,15 @@
 <main>
   <div class="content">
 
-    <p class="page-eyebrow">Legal</p>
-    <h1>Privacy Policy - App</h1>
+    <p class="page-eyebrow">Laba – Travel Tracker</p>
+    <h1>Privacy Policy</h1>
     <p class="effective-date">Last updated: May 19, 2026</p>
 
-    <p class="intro">This Privacy Policy explains how <em>Wiles</em> ("we", "our", or "us") collects, uses, and protects your information when you use the Wiles mobile application.</p>
+    <p class="intro">This Privacy Policy explains how <em>Laba – Travel Tracker</em> ("we", "our", or "us") collects, uses, and protects your information when you use the Laba mobile application.</p>
 
     <div class="section">
       <h2>1. Information We Collect</h2>
-      <p>Wiles is designed to minimize data collection. We may collect and store the following information:</p>
+      <p>Laba is designed to minimize data collection. We may collect and store the following information:</p>
       <ul>
         <li>Email address (only when creating an account)</li>
         <li>Basic authentication information</li>
@@ -280,32 +280,46 @@
     </div>
 
     <div class="section">
-      <h2>5. Data Storage and Security</h2>
+      <h2>5. Analytics and Usage Data</h2>
+      <p>Wiles may collect anonymous or limited usage analytics to improve the app experience and features. This may include:</p>
+      <ul>
+        <li>Session duration</li>
+        <li>Number of trips created</li>
+        <li>Feature usage</li>
+        <li>Progression and reward statistics</li>
+        <li>General in-app interactions</li>
+        <li>App performance and stability information</li>
+      </ul>
+      <p>This information is used only to improve the functionality, balance, and user experience of the app. We do not sell analytics data to third parties.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Data Storage and Security</h2>
       <p>We take reasonable measures to help protect user information and prevent unauthorized access or misuse. However, no method of electronic storage or transmission over the internet can be guaranteed to be completely secure.</p>
     </div>
 
     <div class="section">
-      <h2>6. Data Retention</h2>
+      <h2>7. Data Retention</h2>
       <p>We retain account-related information only for as long as necessary to provide the service.</p>
     </div>
 
     <div class="section">
-      <h2>7. Account and Data Deletion</h2>
+      <h2>8. Account and Data Deletion</h2>
       <p>Users can delete their account directly from within the app. Deleting an account will remove associated account data from our systems within a reasonable timeframe.</p>
     </div>
 
     <div class="section">
-      <h2>8. Children's Privacy</h2>
-      <p>Wiles is not intended for children under the age required by local laws without parental permission.</p>
+      <h2>9. Children's Privacy</h2>
+      <p>Laba is not intended for children under the age required by local laws without parental permission.</p>
     </div>
 
     <div class="section">
-      <h2>9. Changes to This Privacy Policy</h2>
+      <h2>10. Changes to This Privacy Policy</h2>
       <p>We may update this Privacy Policy from time to time. Any changes will be posted on this page with an updated revision date.</p>
     </div>
 
     <div class="section">
-      <h2>10. Contact</h2>
+      <h2>11. Contact</h2>
       <p>If you have questions about this Privacy Policy, you can <a href="contact.html" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(232,200,74,0.3);">contact us</a>.</p>
     </div>
 
