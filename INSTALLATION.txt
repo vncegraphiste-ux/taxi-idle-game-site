@@ -1,0 +1,10 @@
+MISE À JOUR WILES
+
+1. Sauvegardez le dépôt actuel (Code > Download ZIP).
+2. Décompressez ce dossier et importez son contenu à la racine du dépôt existant. Importez le dossier assets avec les fichiers HTML/CSS/JS.
+3. Ne supprimez aucun ancien fichier : app-ads.txt, contact.html, privacy.html, Privacy-Laba.html, terms.html, terms-laba.html, style.css et laba-1.jpg à laba-5.jpg doivent rester. Préservez aussi CNAME et les paramètres Pages/DNS existants.
+4. index.html devient l’accueil Wiles ; laba.html ouvre Laba avec détection de langue. games.html conserve votre ancien index, avec sa section jeux.
+5. Le nouveau style est nommé wiles-style.css pour préserver le style.css existant.
+6. Vérifiez le déploiement GitHub Pages, les liens et l’URL app-ads.txt déjà utilisée par AdMob.
+
+Aucun code AdMob, Analytics, Meta Pixel ni balise de vérification détecté dans l’index fourni. app-ads.txt n’est pas inclus : conservez votre fichier original sans le modifier. Les anciennes pages légales et contact ne sont pas incluses : elles restent dans votre dépôt.
