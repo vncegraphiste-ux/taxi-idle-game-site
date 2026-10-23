@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "R6CAAFM4Q9.com.wiles.DrawSomething",
+        "paths": [
+          "/draw-something/invite/*"
+        ]
+      }
+    ]
+  }
+}
