@@ -3,76 +3,136 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#207EF9">
+  <meta name="theme-color" content="#147cff">
+  <!-- Replace APP_STORE_ID below with the numeric App Store Apple ID when available. -->
   <meta name="apple-itunes-app" content="app-id=APP_STORE_ID">
-  <title>Draw Something Together — Invitation</title>
-  <meta name="description" content="Someone sent you a drawing! Open Draw Something Together to play.">
-  <meta property="og:title" content="You got a drawing! — Draw Something Together">
-  <meta property="og:description" content="Open your invitation and play together.">
+  <title>You've got a drawing! — Draw Something Together</title>
+  <meta name="description" content="A friend sent you a drawing. Open Draw Something Together to guess it!">
+  <meta property="og:title" content="You've got a drawing! — Draw Something Together">
+  <meta property="og:description" content="A friend invited you to play Draw Something Together.">
   <meta property="og:image" content="https://wiles.app/draw-something-app-icon.png">
   <link rel="icon" type="image/png" href="/draw-something-app-icon.png">
   <style>
-    :root{color-scheme:light;font-family:ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:#E2F3FF;color:#103165}
-    .top{min-height:60vh;background:radial-gradient(ellipse at 55% 5%,#53c9ff 0%,transparent 52%),linear-gradient(145deg,#207EF9 0%,#005DFF 95%);padding:clamp(28px,7vh,70px) 20px 120px;text-align:center;position:relative;overflow:hidden}
-    .top:before{content:"";position:absolute;width:400px;height:400px;border:2px solid #ffffff20;border-radius:50%;top:-240px;left:calc(50% - 200px)}
-    .brand{font-weight:900;color:white;font-size:18px;letter-spacing:-.6px;position:relative}
-    .panel{max-width:440px;background:white;border-radius:32px;box-shadow:0 28px 70px #0044982c;padding:36px 28px 30px;margin:-106px auto 34px;position:relative;text-align:center}
-    .icon{display:block;width:116px;height:116px;border-radius:26px;margin:0 auto 26px;filter:drop-shadow(0 8px 14px #0053bb22)}
-    h1{font-weight:900;font-size:clamp(27px,6.8vw,34px);letter-spacing:-1.1px;line-height:1.14;margin:0 0 14px}p{line-height:1.6;color:#5c718e;margin:0 0 24px;font-size:15px}
-    .btn{display:block;width:100%;border:0;text-decoration:none;cursor:pointer;padding:17px 18px;border-radius:15px;font-size:16px;font-weight:800;margin-top:12px;color:white;background:#0D7CFC;box-shadow:0 7px 0 #0060D8;transition:transform .12s}
-    .btn:active{transform:translateY(3px);box-shadow:0 4px 0 #0060D8}.btn.secondary{background:#0542AE;box-shadow:0 7px 0 #043488}
-    .hint{font-size:12px;color:#71839d;margin-top:24px;line-height:1.55}.status{font-size:13px;color:#466796;min-height:20px;margin:17px 0 0}
-    footer{text-align:center;font-size:12px;color:#426594;padding:3px 20px 34px}footer a{color:#305c9f;text-decoration:none}footer a:hover{text-decoration:underline}
-    .lang{display:flex;justify-content:center;gap:8px;margin-top:22px}.lang button{background:#ffffff24;border:1px solid #ffffff55;color:#fff;border-radius:99px;font-weight:700;padding:7px 10px;cursor:pointer}.lang button[aria-pressed="true"]{background:white;color:#075de5}
-    @media(max-width:500px){.top{padding-top:38px}.panel{margin-left:18px;margin-right:18px;padding:30px 21px 27px}.icon{width:108px;height:108px}}
+    :root { font-family: ui-rounded, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #173962; color-scheme: light; -webkit-font-smoothing: antialiased; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { min-height: 100%; }
+    body { margin: 0; min-height: 100vh; background: #e2f3ff; }
+    .hero { height: 195px; background: radial-gradient(ellipse at 50% -30%,#71d7ff 0,transparent 58%),linear-gradient(135deg,#207ef9 0%,#005dff 100%); position: relative; overflow: hidden; }
+    .hero::after { content: ''; position: absolute; width: 390px; height: 390px; border-radius: 50%; border: 1px solid #ffffff30; top: -270px; left: calc(50% - 195px); }
+    .wrap { width: min(100% - 28px, 440px); margin: -152px auto 0; position: relative; z-index: 1; }
+    .brand { text-align: center; color: #fff; font-size: 16px; font-weight: 900; letter-spacing: -.5px; margin: 0 0 14px; text-shadow: 0 2px 10px #0659ca60; }
+    .card { padding: 23px 22px 22px; background: #fff; border-radius: 26px; box-shadow: 0 16px 40px #0056a51e; text-align: center; }
+    .app-icon { width: 86px; height: 86px; display: block; object-fit: cover; border-radius: 21px; margin: 0 auto 14px; box-shadow: 0 7px 16px #154f8733; }
+    h1 { font-size: clamp(25px,6vw,30px); letter-spacing: -.95px; line-height: 1.14; margin: 0 0 7px; color: #10386c; }
+    .intro { color: #67809a; font-size: 14px; line-height: 1.42; margin: 0 0 18px; }
+    .choice { margin: 0 0 13px; }
+    .choice-label { text-align: left; display: flex; align-items: center; gap: 7px; margin: 0 0 7px 3px; color: #466381; font-size: 12px; font-weight: 800; }
+    .choice-label .number { color: #0876eb; background: #e6f2ff; width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 11px; }
+    .btn { min-height: 49px; display: flex; gap: 10px; align-items: center; justify-content: center; width: 100%; border: none; border-radius: 13px; font: inherit; font-size: 15px; font-weight: 850; text-decoration: none; cursor: pointer; transition: transform .12s, filter .12s; }
+    .btn:active { transform: scale(.985); }
+    .btn:hover { filter: brightness(1.06); }
+    .btn.primary { color: #fff; background: #0d7cfc; box-shadow: 0 4px 0 #0867d4; }
+    .btn.secondary { color: #fff; background: #0542ae; box-shadow: 0 4px 0 #043487; }
+    .btn svg { width: 20px; height: 20px; flex: none; fill: currentColor; }
+    .code-box { background: #f0f7ff; border: 1px solid #dcecff; border-radius: 14px; padding: 10px 12px; margin-top: 16px; text-align: left; }
+    .code-title { font-size: 11px; color: #67809a; font-weight: 750; margin-bottom: 5px; }
+    .code-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .token { font-size: 15px; letter-spacing: 1px; font-weight: 850; overflow-wrap: anywhere; color: #064998; }
+    .copy { font: inherit; font-size: 12px; font-weight: 850; color: #075bcb; background: white; border: 1px solid #cde3ff; border-radius: 9px; padding: 8px 10px; cursor: pointer; white-space: nowrap; }
+    .copy:focus-visible,.btn:focus-visible,.language button:focus-visible { outline: 3px solid #ffcc4d; outline-offset: 2px; }
+    .small-note { margin: 9px 0 0; font-size: 11.5px; line-height: 1.4; color: #7589a2; }
+    .message { min-height: 16px; font-size: 11px; color: #1766ba; margin: 7px 0 0; }
+    .language { display: flex; justify-content: center; gap: 7px; margin: 15px 0 9px; }
+    .language button { cursor: pointer; padding: 7px 12px; border-radius: 25px; border: 1px solid #c6def7; color: #46729c; background: #f3faff; font-size: 11px; font-weight: 850; }
+    .language button[aria-pressed="true"] { background: #0d7cfc; color: white; border-color: #0d7cfc; }
+    footer { text-align: center; padding: 3px 12px 18px; font-size: 11px; color: #6b8daa; }
+    footer a { color: #356ca8; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    @media(max-width:380px){ .hero{height:165px}.wrap{margin-top:-135px}.card{padding:19px 17px}.app-icon{width:72px;height:72px;border-radius:18px}.intro{margin-bottom:14px}.choice{margin-bottom:11px} }
+    @media(min-height:850px){.hero{height:220px}.wrap{margin-top:-163px}}
   </style>
 </head>
 <body>
-  <div class="top"><div class="brand">✏️ Draw Something Together</div><nav class="lang" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button><button data-lang="fr" aria-pressed="false">FR</button><button data-lang="pt" aria-pressed="false">PT</button></nav></div>
-  <main class="panel">
-    <img class="icon" src="/draw-something-app-icon.png" alt="Draw Something Together app icon" width="116" height="116">
-    <h1 id="headline">Someone sent you a drawing!</h1>
-    <p id="intro">A friend invited you to guess their drawing. Join them and play together!</p>
-    <a class="btn" id="open" href="#">Open the game</a>
-    <a class="btn secondary" id="store" href="https://apps.apple.com/">Get the app</a>
-    <div class="status" id="status" role="status" aria-live="polite"></div>
-    <div class="hint" id="hint">Already installed? Tap “Open the game”. New player? Install the app, then use your invitation code to join.</div>
-  </main>
-  <footer><span>© <span id="year"></span> Wiles</span> · <a href="/draw-something-privacy.html" id="privacy">Privacy Policy</a> · <a href="/draw-something-terms.html" id="terms">Terms of Use</a></footer>
-<script>
-(function(){'use strict';
-  // Replace APP_STORE_ID in BOTH this variable and the apple-itunes-app meta tag above.
-  const APP_STORE_ID='APP_STORE_ID';
-  const t=location.pathname.match(/draw-something\/invite\/([a-zA-Z0-9]+)/i);
-  const token=t?t[1].toLowerCase():'';
-  const scheme=token?'drawsomething://invite/'+encodeURIComponent(token):'';
-  const storeURL=APP_STORE_ID==='APP_STORE_ID'?'https://apps.apple.com/':'https://apps.apple.com/app/id'+APP_STORE_ID;
-  const txt={
-    en:{headline:'Someone sent you a drawing!',intro:'A friend invited you to guess their drawing. Join them and play together!',open:'Open the game',store:'Get the app',hint:'Already installed? Tap “Open the game”. New player? Install the app, then use your invitation code to join.',copied:'Invitation code copied.',code:'Your invitation code: ',copy:'Copy invitation code',privacy:'Privacy Policy',terms:'Terms of Use'},
-    es:{headline:'¡Te enviaron un dibujo!',intro:'Un amigo te invita a adivinar su dibujo. ¡Únete y jugad juntos!',open:'Abrir el juego',store:'Descargar la app',hint:'¿Ya la tienes? Pulsa «Abrir el juego». Si es tu primera vez, instala la app y utiliza el código de invitación.',copied:'Código de invitación copiado.',code:'Tu código de invitación: ',copy:'Copiar el código',privacy:'Política de privacidad',terms:'Condiciones de uso'},
-    fr:{headline:'On t’a envoyé un dessin !',intro:'Un ami t’invite à deviner son dessin. Rejoins-le pour jouer ensemble !',open:'Ouvrir le jeu',store:'Télécharger l’app',hint:'Déjà installé ? Appuie sur « Ouvrir le jeu ». Sinon, installe l’app puis utilise le code d’invitation.',copied:'Code d’invitation copié.',code:'Ton code d’invitation : ',copy:'Copier le code',privacy:'Confidentialité',terms:'Conditions d’utilisation'},
-    pt:{headline:'Enviaram-te um desenho!',intro:'Um amigo convidou-te a adivinhar o desenho. Junta-te a ele e joguem juntos!',open:'Abrir o jogo',store:'Descarregar a app',hint:'Já tens a app? Toca em «Abrir o jogo». Se és novo, instala a app e usa o código do convite.',copied:'Código do convite copiado.',code:'O teu código de convite: ',copy:'Copiar código',privacy:'Privacidade',terms:'Termos de utilização'}
-  };
-  let lang=(navigator.languages||[navigator.language||'en']).map(x=>String(x).slice(0,2).toLowerCase()).find(x=>txt[x])||'en';
-  const el=id=>document.getElementById(id);
-  function setLang(next){lang=next;document.documentElement.lang=lang;for(const key of ['headline','intro','open','store','hint','privacy','terms'])el(key).textContent=txt[lang][key];document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));el('status').textContent=token?txt[lang].code+token:'';}
-  document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
-  el('year').textContent=new Date().getFullYear();el('store').href=storeURL;
-  el('open').href=scheme||'#';
-  if(!token){el('open').setAttribute('aria-disabled','true');el('open').removeAttribute('href');}
-  if(token){
-    try{localStorage.setItem('dst_invite_token',token);}catch(e){}
-    // Browser clipboard permissions can require a user gesture. Automatic copying is best-effort.
-    async function copyCode(){try{await navigator.clipboard.writeText('dst-invite:'+token);el('status').textContent=txt[lang].copied;}catch(e){el('status').textContent=txt[lang].code+token;}}
-    copyCode();
-    const copy=document.createElement('button');copy.type='button';copy.className='btn secondary';copy.style.cssText='background:#e7f1ff;color:#0542AE;box-shadow:none;margin-top:18px;font-size:14px;padding:13px;';copy.textContent=txt[lang].copy;copy.addEventListener('click',copyCode);el('hint').after(copy);
-    document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>copy.textContent=txt[lang].copy));
-    // Best-effort fallback to the custom URL scheme. On Safari, an automatic launch may be blocked.
-    if(/iPhone|iPad|iPod/i.test(navigator.userAgent)){setTimeout(()=>{if(!document.hidden)location.href=scheme;},450);}
-  }
-  setLang(lang);
-})();
-</script>
+  <div class="hero" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="brand">✏️ Draw Something Together</div>
+    <main class="card">
+      <img class="app-icon" src="/draw-something-app-icon.png" alt="Draw Something Together" width="86" height="86">
+      <h1 id="headline">You've got a drawing!</h1>
+      <p class="intro" id="intro">A friend is waiting for you to guess their drawing.</p>
+      <section class="choice" aria-labelledby="installed-label">
+        <div class="choice-label" id="installed-label"><span class="number">1</span><span id="installed">Already have the app?</span></div>
+        <a class="btn primary" id="open" href="#"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span id="open-label">Open the game</span></a>
+      </section>
+      <section class="choice" aria-labelledby="new-label">
+        <div class="choice-label" id="new-label"><span class="number">2</span><span id="not-installed">Don't have the app yet?</span></div>
+        <a class="btn secondary" id="store" href="https://apps.apple.com/us/search?term=Draw%20Something%20Together"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 12.5c.02 2.25 1.98 3 2 3.01-.02.06-.31 1.08-1.03 2.14-.62.91-1.26 1.81-2.28 1.83-1 .02-1.33-.6-2.48-.6-1.14 0-1.51.58-2.46.62-1 .04-1.77-.99-2.39-1.9-1.3-1.88-2.3-5.3-.96-7.63.66-1.16 1.83-1.89 3.1-1.91.97-.02 1.9.67 2.49.67.59 0 1.7-.83 2.86-.7.49.02 1.87.2 2.75 1.49-.07.04-1.65.96-1.63 2.98ZM14.7 6.8c.52-.63.87-1.5.77-2.37-.75.03-1.65.5-2.19 1.13-.48.54-.9 1.43-.79 2.27.84.07 1.68-.42 2.21-1.03Z"/></svg><span id="store-label">Open App Store</span></a>
+      </section>
+      <div class="code-box" id="code-box">
+        <div class="code-title" id="code-title">Save this code to join after installing</div>
+        <div class="code-row"><span id="token" class="token">—</span><button class="copy" id="copy" type="button">Copy code</button></div>
+      </div>
+      <p class="small-note" id="note">After installing, open the game and enter this invitation code if your drawing doesn't open automatically.</p>
+      <p class="message" id="message" role="status" aria-live="polite"></p>
+    </main>
+    <nav class="language" aria-label="Language"><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="es" aria-pressed="false">ES</button><button type="button" data-lang="fr" aria-pressed="false">FR</button><button type="button" data-lang="pt" aria-pressed="false">PT</button></nav>
+    <footer>© <span id="year"></span> Wiles · <a href="/draw-something-privacy.html" id="privacy">Privacy Policy</a> · <a href="/draw-something-terms.html" id="terms">Terms of Use</a></footer>
+  </div>
+  <script>
+  (() => {
+    'use strict';
+    // Replace this numeric ID and the apple-itunes-app meta tag above when the App Store ID is available.
+    const APP_STORE_ID = 'APP_STORE_ID';
+    const match = location.pathname.match(/draw-something\/invite\/([a-zA-Z0-9]+)/i);
+    const token = match ? match[1].toLowerCase() : '';
+    const scheme = token ? `drawsomething://invite/${encodeURIComponent(token)}` : '';
+    const storeURL = /^\d+$/.test(APP_STORE_ID)
+      ? `https://apps.apple.com/app/id${APP_STORE_ID}`
+      : 'https://apps.apple.com/us/search?term=Draw%20Something%20Together';
+    const translations = {
+      en: {headline:"You've got a drawing!",intro:'A friend is waiting for you to guess their drawing.',installed:'Already have the app?',open:'Open the game',notInstalled:"Don't have the app yet?",store:'Open App Store',codeTitle:'Save this code to join after installing',copy:'Copy code',copied:'Copied!',note:"After installing, open the game and enter this invitation code if your drawing doesn't open automatically.",privacy:'Privacy Policy',terms:'Terms of Use',missing:'No invitation code found.'},
+      es: {headline:'¡Te enviaron un dibujo!',intro:'Un amigo espera a que adivines su dibujo.',installed:'¿Ya tienes la app?',open:'Abrir el juego',notInstalled:'¿Todavía no tienes la app?',store:'Abrir App Store',codeTitle:'Guarda este código para unirte después de instalar',copy:'Copiar código',copied:'¡Copiado!',note:'Después de instalar, abre el juego e introduce este código si el dibujo no se abre automáticamente.',privacy:'Política de privacidad',terms:'Condiciones de uso',missing:'No se encontró ningún código de invitación.'},
+      fr: {headline:'On t’a envoyé un dessin !',intro:'Un ami attend que tu devines son dessin.',installed:'Tu as déjà le jeu ?',open:'Ouvrir le jeu',notInstalled:'Tu n’as pas encore le jeu ?',store:'Ouvrir l’App Store',codeTitle:'Garde ce code pour rejoindre la partie après installation',copy:'Copier le code',copied:'Copié !',note:'Après l’installation, ouvre le jeu et saisis ce code si le dessin ne s’ouvre pas automatiquement.',privacy:'Confidentialité',terms:'Conditions d’utilisation',missing:'Aucun code d’invitation trouvé.'},
+      pt: {headline:'Enviaram-te um desenho!',intro:'Um amigo está à espera que adivinhes o desenho.',installed:'Já tens a aplicação?',open:'Abrir o jogo',notInstalled:'Ainda não tens a aplicação?',store:'Abrir a App Store',codeTitle:'Guarda este código para entrares depois de instalar',copy:'Copiar código',copied:'Copiado!',note:'Depois de instalares, abre o jogo e introduz este código caso o desenho não abra automaticamente.',privacy:'Privacidade',terms:'Termos de utilização',missing:'Não foi encontrado nenhum código de convite.'}
+    };
+    const el = id => document.getElementById(id);
+    let lang = (navigator.languages || [navigator.language || 'en']).map(x => String(x).slice(0,2).toLowerCase()).find(x => translations[x]) || 'en';
+    function applyLanguage(next) {
+      lang = next; document.documentElement.lang = lang; const t = translations[lang];
+      ['headline','intro','installed','notInstalled','note','privacy','terms'].forEach(id => el(id).textContent = t[id]);
+      el('open-label').textContent = t.open; el('store-label').textContent = t.store;
+      el('code-title').textContent = t.codeTitle; el('copy').textContent = t.copy;
+      if(!token) el('message').textContent = t.missing;
+      else el('message').textContent = '';
+      document.querySelectorAll('[data-lang]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.lang === lang)));
+    }
+    el('year').textContent = new Date().getFullYear();
+    el('store').href = storeURL;
+    el('token').textContent = token || '—';
+    // The custom URL scheme must ONLY launch from a user tap; never on page load.
+    if (token) {
+      el('open').href = scheme;
+      try { localStorage.setItem('dst_invite_token', token); } catch (_) {}
+    } else {
+      el('open').removeAttribute('href'); el('open').setAttribute('aria-disabled', 'true');
+      el('copy').disabled = true;
+    }
+    async function copyCode() {
+      if (!token) return;
+      const value = `dst-invite:${token}`;
+      try {
+        if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(value);
+        else {
+          const field = document.createElement('textarea'); field.value=value; field.style.position='fixed'; field.style.opacity='0'; document.body.appendChild(field);field.select();
+          const success = document.execCommand('copy');field.remove();if(!success) throw Error('Copy unavailable');
+        }
+        el('message').textContent = translations[lang].copied;
+      } catch (_) { el('message').textContent = value; }
+    }
+    el('copy').addEventListener('click', copyCode);
+    document.querySelectorAll('[data-lang]').forEach(button => button.addEventListener('click',()=>applyLanguage(button.dataset.lang)));
+    applyLanguage(lang);
+  })();
+  </script>
 </body>
 </html>
