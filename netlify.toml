@@ -1,0 +1,33 @@
+[build]
+  # Ne change pas le build du site existant : ajoute seulement les Functions.
+  functions = "netlify/functions"
+  publish = "."
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/api/login"
+  to = "/.netlify/functions/login"
+  status = 200
+
+[[redirects]]
+  from = "/api/logout"
+  to = "/.netlify/functions/logout"
+  status = 200
+
+[[redirects]]
+  from = "/api/reports"
+  to = "/.netlify/functions/reports"
+  status = 200
+
+[[redirects]]
+  from = "/api/moderate"
+  to = "/.netlify/functions/moderate"
+  status = 200
+
+[[headers]]
+  for = "/draw-moderation.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow, noarchive"
+    Cache-Control = "no-store"
