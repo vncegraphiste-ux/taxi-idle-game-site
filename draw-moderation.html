@@ -7,85 +7,328 @@
 <title>Modération Draw Something</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#111315;color:#f5f5f5}
-*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:960px;margin:auto}header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:0 0 24px}
-h1{font-size:clamp(23px,4vw,34px);margin:0}p{line-height:1.5}small,.muted{color:#a7abb0}button,input{font:inherit}button{border:0;border-radius:11px;padding:13px 18px;font-weight:700;cursor:pointer;min-height:46px}button:disabled{opacity:.4;cursor:not-allowed}
+*{box-sizing:border-box}body{margin:0;padding:24px}main{max-width:960px;margin:auto}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin:0 0 24px}
+h1{font-size:clamp(23px,4vw,34px);margin:0}h2{font-size:18px;margin:0 0 8px}
+p{line-height:1.5}.muted{color:#a7abb0}button,input{font:inherit}
+button{border:0;border-radius:11px;padding:13px 18px;font-weight:700;cursor:pointer;min-height:46px}
+button:disabled{opacity:.4;cursor:not-allowed}
 input{background:#25282b;color:white;border:1px solid #52575e;border-radius:10px;padding:14px;width:100%;margin:8px 0 15px}
-.card{border:1px solid #3c4044;background:#1c1f22;border-radius:16px;padding:20px;margin:14px 0}.login{max-width:420px;margin:12vh auto}.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1}.green{background:#3dc77f;color:#082d1c}.orange{background:#ffb954;color:#372200}.red{background:#ff5b69;color:#3c090f}.neutral{background:#373c41;color:white}
-.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.meta div{overflow-wrap:anywhere}.meta b{display:block;color:#a7abb0;font-size:12px;margin-bottom:4px}
-pre{background:#111315;padding:12px;border-radius:10px;max-height:160px;overflow:auto;font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}.preview{width:100%;max-width:650px;height:auto;background:white;border-radius:10px;display:none;margin:12px 0}
-#error{color:#ff8790}.topbutton{width:auto}.hidden{display:none!important}@media(max-width:600px){body{padding:14px}.meta{grid-template-columns:1fr}.row{flex-direction:column}}
+.card{border:1px solid #3c4044;background:#1c1f22;border-radius:16px;padding:20px;margin:14px 0}
+.login{max-width:420px;margin:12vh auto}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.green{background:#3dc77f;color:#082d1c}.orange{background:#ffb954;color:#372200}
+.red{background:#ff5b69;color:#3c090f}.neutral{background:#373c41;color:white}
+.meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+.meta div{overflow-wrap:anywhere}.meta b{display:block;color:#a7abb0;font-size:12px;margin-bottom:4px}
+.preview-wrap{background:#fff;border-radius:12px;padding:10px;margin:12px 0;max-width:650px}
+.preview{width:100%;height:auto;display:block;border-radius:8px;background:#fff}
+#error,#loginError{color:#ff8790;min-height:1.2em}.topbutton{width:auto}.hidden{display:none!important}
+@media(max-width:600px){body{padding:14px}.meta{grid-template-columns:1fr}.row{flex-direction:column}}
 </style>
 </head>
-<body><main>
+<body>
+<main>
 <section id="login" class="card login">
-  <h1>Modération Draw Something</h1><p class="muted">Accès réservé à l'administration.</p>
-  <form id="loginForm"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required /><button class="green" type="submit">Se connecter</button></form>
+  <h1>Modération Draw Something</h1>
+  <p class="muted">Accès réservé à l’administration.</p>
+  <form id="loginForm">
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" autocomplete="current-password" required />
+    <button class="green" type="submit">Se connecter</button>
+  </form>
   <p id="loginError" role="alert"></p>
 </section>
+
 <section id="panel" class="hidden">
-  <header><div><h1>Modération Draw Something</h1><p class="muted" id="count">Chargement…</p></div><button class="neutral topbutton" id="refresh">Actualiser</button></header>
-  <div id="error" role="alert"></div><div id="reports"></div>
+  <header>
+    <div>
+      <h1>Modération Draw Something</h1>
+      <p class="muted" id="count">Chargement…</p>
+    </div>
+    <div class="actions">
+      <button class="neutral topbutton" id="refresh" type="button">Actualiser</button>
+      <button class="neutral topbutton" id="logout" type="button">Déconnexion</button>
+    </div>
+  </header>
+  <div id="error" role="alert"></div>
+  <div id="reports"></div>
 </section>
 </main>
+
 <script>
-const $ = id => document.getElementById(id);
-const escapeHtml = value => String(value ?? '—').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pick = (data, names) => names.map(k => data?.[k]).find(v => v !== null && v !== undefined && v !== '') ?? null;
+const $ = (id) => document.getElementById(id);
+let csrfToken = "";
+
+const escapeHtml = (value) => String(value ?? "—").replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[c]));
+
+const pick = (data, names) => names.map((k) => data?.[k]).find((v) => v !== null && v !== undefined && v !== "") ?? null;
 const label = (k, v) => `<div><b>${k}</b>${escapeHtml(v)}</div>`;
-function extractSnapshot(value){if(!value)return null;try{return typeof value==='string'?JSON.parse(value):value}catch{return value}}
-async function api(path, options={}){
- const r=await fetch(path,{credentials:'same-origin',cache:'no-store',...options});
- const data=await r.json().catch(()=>({error:'Réponse inattendue'}));
- if(!r.ok)throw new Error(data.error||'Erreur réseau');
- return data;
+
+function readCsrfCookie() {
+  const match = document.cookie.match(/(?:^|;\s*)ds_mod_csrf=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : "";
 }
-function showPanel(){ $('login').classList.add('hidden');$('panel').classList.remove('hidden'); }
-function showLogin(){ $('panel').classList.add('hidden');$('login').classList.remove('hidden'); }
-$('loginForm').addEventListener('submit', async e=>{
- e.preventDefault();$('loginError').textContent='';
- const button=e.submitter;button.disabled=true;
- try{await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});$('password').value='';showPanel();await loadReports();}
- catch(err){$('loginError').textContent=err.message}finally{button.disabled=false}
+
+function extractSnapshot(value) {
+  if (!value) return null;
+  try { return typeof value === "string" ? JSON.parse(value) : value; }
+  catch { return value; }
+}
+
+async function api(path, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
+  const r = await fetch(path, {
+    credentials: "same-origin",
+    cache: "no-store",
+    ...options,
+    headers,
+  });
+  const data = await r.json().catch(() => ({ error: "Réponse inattendue" }));
+  if (!r.ok) throw new Error(data.error || "Erreur réseau");
+  return data;
+}
+
+function showPanel() {
+  $("login").classList.add("hidden");
+  $("panel").classList.remove("hidden");
+}
+
+function showLogin() {
+  $("panel").classList.add("hidden");
+  $("login").classList.remove("hidden");
+  csrfToken = "";
+}
+
+$("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  $("loginError").textContent = "";
+  const button = e.submitter;
+  button.disabled = true;
+  try {
+    const data = await api("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ password: $("password").value }),
+    });
+    csrfToken = data.csrfToken || readCsrfCookie();
+    $("password").value = "";
+    showPanel();
+    await loadReports();
+  } catch (err) {
+    $("loginError").textContent = err.message;
+  } finally {
+    button.disabled = false;
+  }
 });
-$('refresh').addEventListener('click',loadReports);
-async function loadReports(){
- $('error').textContent='';$('reports').textContent='Chargement des signalements…';
- try{const {reports}=await api('/api/reports');showPanel();$('reports').replaceChildren();$('count').textContent=`${reports.length} signalement(s) en attente${reports.length===200?' (affichage limité à 200)':''}`;
- if(!reports.length){$('reports').textContent='Aucun signalement en attente 🎉';return;}
- for(const report of reports)renderReport(report);
- }catch(err){if(err.message==='Connexion requise'){showLogin();return;}$('reports').textContent='';$('error').textContent=err.message;}
+
+$("refresh").addEventListener("click", loadReports);
+
+$("logout").addEventListener("click", async () => {
+  try { await api("/api/logout", { method: "POST" }); }
+  catch (_) { /* ignore */ }
+  showLogin();
+});
+
+async function loadReports() {
+  $("error").textContent = "";
+  $("reports").textContent = "Chargement des signalements…";
+  try {
+    if (!csrfToken) csrfToken = readCsrfCookie();
+    const { reports } = await api("/api/reports");
+    showPanel();
+    $("reports").replaceChildren();
+    $("count").textContent = `${reports.length} signalement(s) en attente${reports.length === 200 ? " (affichage limité à 200)" : ""}`;
+    if (!reports.length) {
+      $("reports").textContent = "Aucun signalement en attente.";
+      return;
+    }
+    for (const report of reports) renderReport(report);
+  } catch (err) {
+    if (err.message === "Connexion requise") {
+      showLogin();
+      return;
+    }
+    $("reports").textContent = "";
+    $("error").textContent = err.message;
+  }
 }
-function renderReport(r){
- const id=pick(r,['report_id','id']);
- const date=pick(r,['created_at','reported_at','date']);
- const info={
- 'Date':date?new Date(date).toLocaleString('fr-CA'):null,
- 'Joueur signalé':pick(r,['reported_username','reported_player_username','player_username','author_username']),
- 'Signalé par':pick(r,['reporter_username','reporting_username']),
- 'Catégorie':pick(r,['category','category_name']),
- 'Commentaire':pick(r,['comment','reason','report_comment']),
- 'Mot':pick(r,['word_snapshot','word'])};
- const card=document.createElement('article');card.className='card';
- const heading=document.createElement('h2');heading.textContent='Signalement';heading.style.marginTop='0';card.append(heading);
- const meta=document.createElement('div');meta.className='meta';meta.innerHTML=Object.entries(info).map(([k,v])=>label(k,v)).join('');card.append(meta);
- const snapshot=extractSnapshot(pick(r,['drawing_snapshot']));
- if(snapshot){
-  const p=document.createElement('p');p.className='muted';p.textContent='Dessin disponible (snapshot JSON)';card.append(p);
-  const pre=document.createElement('pre');pre.textContent=JSON.stringify(snapshot,null,2).slice(0,12000);card.append(pre);
- }else{const p=document.createElement('p');p.className='muted';p.textContent='Aucun aperçu enregistré dans cette vue.';card.append(p);}
- const buttons=document.createElement('div');buttons.className='row';
- for(const [action,text,color] of [['ok','OK','green'],['ban_10m','Bannir 10 min','orange'],['ban_forever','Ban définitif aléatoire','red']]){
-  const button=document.createElement('button');button.className=color;button.textContent=text;button.disabled=!id;
-  button.addEventListener('click',async()=>{
-   if(!confirm(`Confirmer : ${text} ?`))return;
-   [...buttons.children].forEach(b=>b.disabled=true);$('error').textContent='';
-   try{await api('/api/moderate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({reportId:id,action})});card.remove();await loadReports();}
-   catch(err){$('error').textContent=err.message;[...buttons.children].forEach(b=>b.disabled=false)}
-  });buttons.append(button);
- }
- card.append(buttons);$('reports').append(card);
+
+function renderReport(r) {
+  const id = pick(r, ["id", "report_id"]);
+  const date = pick(r, ["created_at", "reported_at", "date"]);
+  const info = {
+    Date: date ? new Date(date).toLocaleString("fr-FR") : null,
+    "Joueur signalé": pick(r, ["reported_username", "reported_player_username", "author_username"]),
+    "Signalé par": pick(r, ["reporter_username", "reporting_username"]),
+    Catégorie: pick(r, ["category", "category_name"]),
+    Commentaire: pick(r, ["comment", "reason", "report_comment"]),
+    Mot: pick(r, ["word_snapshot", "word"]),
+  };
+
+  const card = document.createElement("article");
+  card.className = "card";
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Signalement";
+  card.append(heading);
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.innerHTML = Object.entries(info).map(([k, v]) => label(k, v)).join("");
+  card.append(meta);
+
+  const snapshot = extractSnapshot(pick(r, ["drawing_snapshot"]));
+  const canvas = drawSnapshot(snapshot);
+  if (canvas) {
+    const wrap = document.createElement("div");
+    wrap.className = "preview-wrap";
+    wrap.append(canvas);
+    card.append(wrap);
+  } else {
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.textContent = "Aucun aperçu de dessin disponible.";
+    card.append(p);
+  }
+
+  const buttons = document.createElement("div");
+  buttons.className = "row";
+  const actions = [
+    ["ok", "OK", "green", "Confirmer : ce dessin est OK ?"],
+    ["ban_10m", "Bannir 10 min", "orange", "Bannir ce joueur du mode aléatoire pendant 10 minutes ?"],
+    ["ban_forever", "Bannir définitivement", "red", "Bannir définitivement ce joueur du mode aléatoire et supprimer la partie ?"],
+  ];
+  for (const [action, text, color, confirmMsg] of actions) {
+    const button = document.createElement("button");
+    button.className = color;
+    button.type = "button";
+    button.textContent = text;
+    button.disabled = !id;
+    button.addEventListener("click", async () => {
+      if (!confirm(confirmMsg)) return;
+      [...buttons.children].forEach((b) => (b.disabled = true));
+      $("error").textContent = "";
+      try {
+        await api("/api/moderate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ reportId: id, action }),
+        });
+        await loadReports();
+      } catch (err) {
+        $("error").textContent = err.message;
+        [...buttons.children].forEach((b) => (b.disabled = false));
+      }
+    });
+    buttons.append(button);
+  }
+  card.append(buttons);
+  $("reports").append(card);
 }
-// Vérifie au chargement si un cookie de session valide existe.
+
+/** Rend le JSON Drawing iOS (strokes normalisés 0…1). */
+function drawSnapshot(snapshot) {
+  const strokes = snapshot?.strokes;
+  if (!Array.isArray(strokes) || !strokes.length) return null;
+
+  const size = 640;
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  canvas.className = "preview";
+  canvas.setAttribute("role", "img");
+  canvas.setAttribute("aria-label", "Aperçu du dessin signalé");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, size, size);
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  for (const stroke of strokes) {
+    const points = Array.isArray(stroke?.points) ? stroke.points : [];
+    if (!points.length) continue;
+    const color = stroke.color || {};
+    const r = Math.round((color.red ?? 0) * 255);
+    const g = Math.round((color.green ?? 0) * 255);
+    const b = Math.round((color.blue ?? 0) * 255);
+    const a = color.alpha ?? 1;
+    ctx.strokeStyle = `rgba(${r},${g},${b},${a})`;
+    ctx.fillStyle = ctx.strokeStyle;
+    const lw = Math.max(1, (stroke.lineWidth ?? 0.02) * size);
+    ctx.lineWidth = lw;
+    const kind = stroke.kind || "solid";
+
+    if (kind === "spray") {
+      for (const pt of points) {
+        const x = (pt.x ?? 0) * size;
+        const y = (pt.y ?? 0) * size;
+        ctx.beginPath();
+        ctx.arc(x, y, Math.max(1, lw * 0.35), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      continue;
+    }
+
+    if (["rectangle", "triangle", "circle", "star"].includes(kind) && points.length >= 2) {
+      const a0 = points[0];
+      const a1 = points[points.length - 1];
+      const x0 = (a0.x ?? 0) * size, y0 = (a0.y ?? 0) * size;
+      const x1 = (a1.x ?? 0) * size, y1 = (a1.y ?? 0) * size;
+      drawShape(ctx, kind, x0, y0, x1, y1);
+      continue;
+    }
+
+    ctx.beginPath();
+    points.forEach((pt, i) => {
+      const x = (pt.x ?? 0) * size;
+      const y = (pt.y ?? 0) * size;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  }
+  return canvas;
+}
+
+function drawShape(ctx, kind, x0, y0, x1, y1) {
+  const minX = Math.min(x0, x1), maxX = Math.max(x0, x1);
+  const minY = Math.min(y0, y1), maxY = Math.max(y0, y1);
+  const w = Math.max(1, maxX - minX), h = Math.max(1, maxY - minY);
+  ctx.beginPath();
+  if (kind === "rectangle") {
+    ctx.rect(minX, minY, w, h);
+  } else if (kind === "circle") {
+    ctx.ellipse(minX + w / 2, minY + h / 2, w / 2, h / 2, 0, 0, Math.PI * 2);
+  } else if (kind === "triangle") {
+    ctx.moveTo(minX + w / 2, minY);
+    ctx.lineTo(maxX, maxY);
+    ctx.lineTo(minX, maxY);
+    ctx.closePath();
+  } else if (kind === "star") {
+    const cx = minX + w / 2, cy = minY + h / 2;
+    const ro = Math.min(w, h) / 2, ri = ro * 0.45;
+    for (let i = 0; i < 10; i++) {
+      const rad = (i * Math.PI) / 5 - Math.PI / 2;
+      const radius = i % 2 === 0 ? ro : ri;
+      const x = cx + Math.cos(rad) * radius;
+      const y = cy + Math.sin(rad) * radius;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+  ctx.stroke();
+}
+
+csrfToken = readCsrfCookie();
 loadReports();
 </script>
-</body></html>
+</body>
+</html>
